@@ -1,5 +1,5 @@
-import { env } from "../config/env";
-import { Sitelog } from "../db/models";
+import { env } from "../config/env.js";
+import { Sitelog } from "../db/models/index.js";
 
 export async function verifyOpenRouterApiKey(apiKey: string) {
   const url = new URL("models", env.OPENROUTER_BASE_URL + (env.OPENROUTER_BASE_URL.endsWith('/') ? '' : '/'));

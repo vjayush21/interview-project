@@ -1,6 +1,6 @@
-import { Session, Question } from "../db/models";
-import { generateInterviewQuestions } from "../openrouter/client";
-import { getDecryptedKey } from "./openrouterCredentialService";
+import { Session, Question } from "../db/models/index.js";
+import { generateInterviewQuestions } from "../openrouter/client.js";
+import { getDecryptedKey } from "./openrouterCredentialService.js";
 
 export async function createSessionAndQuestions(
   userId: number,

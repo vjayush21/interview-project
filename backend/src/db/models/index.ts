@@ -1,8 +1,8 @@
-import { User } from "./User";
-import { OpenRouterCredential } from "./OpenRouterCredential";
-import { Session } from "./Session";
-import { Question } from "./Question";
-import { Sitelog } from "./Sitelog";
+import { User } from "./User.js";
+import { OpenRouterCredential } from "./OpenRouterCredential.js";
+import { Session } from "./Session.js";
+import { Question } from "./Question.js";
+import { Sitelog } from "./Sitelog.js";
 
 // Relationships
 User.hasOne(OpenRouterCredential, { foreignKey: "userId", onDelete: "CASCADE" });

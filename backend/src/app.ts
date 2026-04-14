@@ -4,11 +4,11 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import path from "path";
 import { fileURLToPath } from "url";
-import { env } from "./config/env";
-import { authRoutes } from "./http/routes/authRoutes";
-import { meRoutes } from "./http/routes/meRoutes";
-import { openrouterRoutes } from "./http/routes/openrouterRoutes";
-import { sessionRoutes } from "./http/routes/sessionRoutes";
+import { env } from "./config/env.js";
+import { authRoutes } from "./http/routes/authRoutes.js";
+import { meRoutes } from "./http/routes/meRoutes.js";
+import { openrouterRoutes } from "./http/routes/openrouterRoutes.js";
+import { sessionRoutes } from "./http/routes/sessionRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,7 +55,7 @@ export function createApp() {
   app.use(express.static(frontendPath));
 
   // Handle React Router fallback
-  app.get("*", (req, res, next) => {
+  app.get("/*splat", (req, res, next) => {
     if (req.path.startsWith("/api/")) {
       return next();
     }

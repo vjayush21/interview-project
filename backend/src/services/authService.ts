@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { User } from "../db/models/User";
-import { hashPassword, verifyPassword } from "../security/passwords";
+import { User } from "../db/models/User.js";
+import { hashPassword, verifyPassword } from "../security/passwords.js";
 
 const signupSchema = z.object({
   email: z.string().email().max(255),

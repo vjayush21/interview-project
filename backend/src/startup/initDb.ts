@@ -1,7 +1,7 @@
-import { env } from "../config/env";
-import { sequelize } from "../db/sequelize";
-import "../db/models";
-import { umzug } from "../db/migrator";
+import { env } from "../config/env.js";
+import { sequelize } from "../db/sequelize.js";
+import "../db/models/index.js";
+import { umzug } from "../db/migrator.js";
 
 export async function initDb() {
   await sequelize.authenticate();

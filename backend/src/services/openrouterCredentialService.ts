@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { OpenRouterCredential } from "../db/models/OpenRouterCredential";
-import { decryptOpenRouterApiKey, encryptOpenRouterApiKey } from "../security/openrouterKeyCrypto";
-import { verifyOpenRouterApiKey } from "../openrouter/client";
+import { OpenRouterCredential } from "../db/models/OpenRouterCredential.js";
+import { decryptOpenRouterApiKey, encryptOpenRouterApiKey } from "../security/openrouterKeyCrypto.js";
+import { verifyOpenRouterApiKey } from "../openrouter/client.js";
 
 const apiKeySchema = z.object({
   apiKey: z.string().min(10).max(5000)

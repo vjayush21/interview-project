@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { env } from "../config/env";
+import { env } from "../config/env.js";
 
 function getMasterKey() {
   const raw = Buffer.from(env.OPENROUTER_KEY_MASTER_KEY_BASE64, "base64");

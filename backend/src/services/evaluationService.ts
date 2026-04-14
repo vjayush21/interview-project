@@ -1,7 +1,6 @@
-import { Question } from "../db/models";
-import { getDecryptedKey } from "./openrouterCredentialService";
-import { env } from "../config/env";
-import { Sitelog } from "../db/models";
+import { Question, Sitelog } from "../db/models/index.js";
+import { getDecryptedKey } from "./openrouterCredentialService.js";
+import { env } from "../config/env.js";
 
 const FREE_MODELS = [
   "mistralai/mistral-7b-instruct:free",

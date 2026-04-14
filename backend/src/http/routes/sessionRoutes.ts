@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { z } from "zod";
-import { authRequired } from "../middleware/authRequired";
-import { respondError } from "../utils/respondError";
-import { createSessionAndQuestions, getSession } from "../../services/sessionService";
-import { evaluateAnswer } from "../../services/evaluationService";
-import { Session, Question } from "../../db/models";
+import { authRequired } from "../middleware/authRequired.js";
+import { respondError } from "../utils/respondError.js";
+import { createSessionAndQuestions, getSession } from "../../services/sessionService.js";
+import { evaluateAnswer } from "../../services/evaluationService.js";
+import { Session, Question } from "../../db/models/index.js";
 
 export const sessionRoutes = Router();
 

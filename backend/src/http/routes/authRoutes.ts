@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { ZodError } from "zod";
-import { login, signup } from "../../services/authService";
-import { signAccessToken } from "../../security/jwt";
-import { respondError, respondZodError } from "../utils/respondError";
+import { login, signup } from "../../services/authService.js";
+import { signAccessToken } from "../../security/jwt.js";
+import { respondError, respondZodError } from "../utils/respondError.js";
 
 export const authRoutes = Router();
 

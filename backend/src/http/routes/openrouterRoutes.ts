@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { ZodError } from "zod";
-import { authRequired } from "../middleware/authRequired";
-import { removeKey, upsertApiKey, verifyKey } from "../../services/openrouterCredentialService";
-import { respondError, respondZodError } from "../utils/respondError";
+import { authRequired } from "../middleware/authRequired.js";
+import { removeKey, upsertApiKey, verifyKey } from "../../services/openrouterCredentialService.js";
+import { respondError, respondZodError } from "../utils/respondError.js";
 
 export const openrouterRoutes = Router();
 
@@ -34,7 +34,7 @@ openrouterRoutes.post("/openrouter/verify", authRequired, async (req, res) => {
 
   if (req.body.apiKey) {
     // Verifying a new key before storing
-    const { verifyOpenRouterApiKey } = await import("../../openrouter/client");
+    const { verifyOpenRouterApiKey } = await import("../../openrouter/client.js");
     const verified = await verifyOpenRouterApiKey(req.body.apiKey);
     if (!verified.valid) {
        respondError(res, "INVALID_KEY", "Invalid OpenRouter API key", 400);

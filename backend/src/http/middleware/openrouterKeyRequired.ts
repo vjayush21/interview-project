@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { getActiveApiKeyOrNull } from "../../services/openrouterCredentialService";
+import { getActiveApiKeyOrNull } from "../../services/openrouterCredentialService.js";
 
 declare module "express-serve-static-core" {
   interface Request {

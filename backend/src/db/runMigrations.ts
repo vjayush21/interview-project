@@ -1,5 +1,5 @@
-import { umzug } from "./migrator";
-import { sequelize } from "./sequelize";
+import { umzug } from "./migrator.js";
+import { sequelize } from "./sequelize.js";
 
 async function run() {
   await sequelize.authenticate();

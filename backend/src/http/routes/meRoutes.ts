@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { z } from "zod";
-import { authRequired } from "../middleware/authRequired";
-import { User } from "../../db/models/User";
-import { getCredentialForUser } from "../../services/openrouterCredentialService";
+import { authRequired } from "../middleware/authRequired.js";
+import { User } from "../../db/models/User.js";
+import { getCredentialForUser } from "../../services/openrouterCredentialService.js";
 
 export const meRoutes = Router();
 
