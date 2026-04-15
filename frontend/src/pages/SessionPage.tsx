@@ -6,8 +6,8 @@ import { apiFetch } from "../api/client";
 import { Page } from "../components/Page";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
-import { motion } from "framer-motion";
-import { Loader2, CheckCircle2, AlertCircle, ArrowLeft, Trophy } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Loader2, CheckCircle2, AlertCircle, ArrowLeft, Trophy, Sparkles } from "lucide-react";
 
 export function SessionPage() {
   const { id } = useParams();
@@ -183,6 +183,26 @@ export function SessionPage() {
                           onChange={(e) => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
                           disabled={evaluatingIds[q.id]}
                         />
+                        
+                        <AnimatePresence>
+                          {evaluatingIds[q.id] && (
+                            <motion.div 
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="mt-4 bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 flex items-center justify-center overflow-hidden"
+                            >
+                              <div className="flex items-center gap-3 text-blue-400">
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                                <span className="font-medium flex items-center">
+                                  <Sparkles className="w-4 h-4 mr-2" />
+                                  AI is evaluating your response...
+                                </span>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+
                         {evalErrors[q.id] && (
                           <div className="flex items-center gap-2 mt-2 text-red-400 text-sm">
                             <AlertCircle className="w-4 h-4" />
@@ -191,18 +211,11 @@ export function SessionPage() {
                         )}
                         <div className="mt-4 flex justify-end">
                           <button
-                            className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className={`bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2 ${evaluatingIds[q.id] ? 'opacity-0 hidden' : 'opacity-100'} disabled:opacity-50 disabled:cursor-not-allowed`}
                             onClick={() => evaluateMutation.mutate({ questionId: q.id, answerText: answers[q.id] || "" })}
                             disabled={!answers[q.id]?.trim() || evaluatingIds[q.id]}
                           >
-                            {evaluatingIds[q.id] ? (
-                              <>
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                                Evaluating...
-                              </>
-                            ) : (
-                              "Submit Answer"
-                            )}
+                            Submit Answer
                           </button>
                         </div>
                       </div>

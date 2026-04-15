@@ -1,23 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/authContext";
 import { Page } from "../components/Page";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { apiFetch } from "../api/client";
 import { BrainCircuit, Loader2 } from "lucide-react";
+
+const LOADING_MESSAGES = [
+  "Connecting to Ai...",
+  "Analyzing target role requirements...",
+  "Formulating technical questions...",
+  "Structuring evaluation criteria...",
+  "Applying difficulty constraints...",
+  "Finalizing interview session...",
+  "Almost ready..."
+];
 
 export function SessionConfigPage() {
   const [role, setRole] = useState("Frontend Developer");
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
   const [topics, setTopics] = useState("React, TypeScript, Performance");
-  const [questionCount, setQuestionCount] = useState(5);
+  const [questionCount, setQuestionCount] = useState(3);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
   const [error, setError] = useState("");
   const { accessToken } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (isGenerating) {
+      interval = setInterval(() => {
+        setLoadingMessageIndex((prev) => (prev + 1) % LOADING_MESSAGES.length);
+      }, 3000); // Rotate message every 3 seconds
+    } else {
+      setLoadingMessageIndex(0);
+    }
+    return () => clearInterval(interval);
+  }, [isGenerating]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,13 +133,26 @@ export function SessionConfigPage() {
                 <Button
                   type="submit"
                   disabled={isGenerating}
-                  className="w-full h-12 text-lg bg-blue-600 hover:bg-blue-500"
+                  className="w-full h-12 text-lg bg-blue-600 hover:bg-blue-500 relative overflow-hidden"
                 >
                   {isGenerating ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Generating Questions...
-                    </>
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="flex items-center">
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        <AnimatePresence mode="wait">
+                          <motion.span
+                            key={loadingMessageIndex}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-sm font-medium"
+                          >
+                            {LOADING_MESSAGES[loadingMessageIndex]}
+                          </motion.span>
+                        </AnimatePresence>
+                      </div>
+                    </div>
                   ) : (
                     <>
                       <BrainCircuit className="mr-2 h-5 w-5" />

@@ -39,7 +39,7 @@ export async function createSessionAndQuestions(
   // 4. Generate questions via OpenRouter
   const generation = await generateInterviewQuestions(apiKey, role, difficulty, topics, questionTargetCount);
 
-  if (generation.error || !generation.questions) {
+  if (generation.error || !generation.questions || generation.questions.length === 0) {
     // Mark questions as failed
     await Promise.all(
       pendingQuestions.map((q) =>
@@ -50,14 +50,25 @@ export async function createSessionAndQuestions(
         })
       )
     );
-    throw new Error(generation.error || "Failed to generate questions");
+    
+    // Add context to the error so the user knows it's an upstream OpenRouter issue
+    const errorMessage = generation.error 
+      ? `OpenRouter Free Tier Error: ${generation.error}` 
+      : "Failed to generate questions due to upstream provider error.";
+      
+    throw new Error(errorMessage);
   }
 
   // 5. Update questions with generated data
   const readyQuestions = await Promise.all(
     pendingQuestions.map(async (q, i) => {
       const generated = generation.questions![i];
-      if (!generated) return q.update({ status: "failed" }); // if less questions generated
+      
+      // If the model gave us fewer questions than we asked for, delete the extra "pending" rows
+      if (!generated) {
+        await q.destroy(); // Soft delete the extra question
+        return null;
+      }
 
       return q.update({
         status: "ready",
@@ -72,7 +83,15 @@ export async function createSessionAndQuestions(
     })
   );
 
-  return { session: session.toJSON(), questions: readyQuestions.map(q => q.toJSON()) };
+  // Filter out the nulls (the ones we deleted)
+  const validQuestions = readyQuestions.filter(q => q !== null);
+
+  // Update the session's target count so the dashboard "X / Y answered" progress bar still works correctly
+  if (validQuestions.length < questionTargetCount) {
+    await session.update({ questionTargetCount: validQuestions.length });
+  }
+
+  return { session: session.toJSON(), questions: validQuestions.map(q => q.toJSON()) };
 }
 
 export async function getSession(sessionId: number, userId: number) {
