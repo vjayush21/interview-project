@@ -4,6 +4,7 @@ import { hashPassword, verifyPassword } from "../security/passwords.js";
 
 const signupSchema = z.object({
   email: z.string().email().max(255),
+  phoneNumber: z.string().min(10).max(20),
   password: z.string().min(10).max(72),
   displayName: z.string().min(1).max(120)
 });
@@ -25,6 +26,7 @@ export async function signup(input: unknown) {
   const passwordHash = await hashPassword(data.password);
   const user = await User.create({
     email,
+    phoneNumber: data.phoneNumber,
     passwordHash,
     displayName: data.displayName
   });

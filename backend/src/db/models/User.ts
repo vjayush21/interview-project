@@ -4,6 +4,7 @@ import { sequelize } from "../sequelize.js";
 export type UserAttributes = {
   id: number;
   email: string;
+  phoneNumber: string | null;
   passwordHash: string;
   displayName: string;
   createdAt: Date;
@@ -12,6 +13,7 @@ export type UserAttributes = {
 
 export type UserCreationAttributes = {
   email: string;
+  phoneNumber?: string | null;
   passwordHash: string;
   displayName: string;
 };
@@ -19,6 +21,7 @@ export type UserCreationAttributes = {
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   declare id: number;
   declare email: string;
+  declare phoneNumber: string | null;
   declare passwordHash: string;
   declare displayName: string;
   declare createdAt: Date;
@@ -29,6 +32,7 @@ User.init(
   {
     id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
     email: { type: DataTypes.STRING(255), allowNull: false, unique: true },
+    phoneNumber: { type: DataTypes.STRING(20), allowNull: true, field: "phone_number" },
     passwordHash: { type: DataTypes.STRING(255), allowNull: false, field: "password_hash" },
     displayName: { type: DataTypes.STRING(120), allowNull: false, field: "display_name" },
     createdAt: { type: DataTypes.DATE, allowNull: false, field: "created_at" },

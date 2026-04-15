@@ -11,6 +11,8 @@ import { apiFetch } from "../api/client";
 
 export function SignupPage() {
   const [email, setEmail] = useState("");
+  const [countryCode, setCountryCode] = useState("+1");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
@@ -21,11 +23,35 @@ export function SignupPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Frontend Validations
+    if (displayName.trim().length < 2) {
+      setError("Name must be at least 2 characters long.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    // Basic phone number validation: allows numbers, spaces, parentheses, dashes
+    const fullPhoneNumber = `${countryCode}${phoneNumber}`;
+    const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    const strippedPhone = fullPhoneNumber.replace(/[\s\(\)\-]/g, '');
+    if (!phoneRegex.test(fullPhoneNumber) || strippedPhone.length < 10) {
+      setError("Please enter a valid phone number (at least 10 digits).");
+      return;
+    }
+    if (password.length < 10) {
+      setError("Password must be at least 10 characters long.");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const data = await apiFetch<{ user: any; accessToken: string }>("/auth/signup", {
         method: "POST",
-        body: { email, password, displayName }
+        body: { email, phoneNumber: fullPhoneNumber, password, displayName }
       });
       setAuth({ user: data.user, accessToken: data.accessToken });
       navigate("/onboarding/openrouter");
@@ -82,6 +108,34 @@ export function SignupPage() {
                     required
                     className="h-11"
                   />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-300">Phone Number</label>
+                  <div className="flex gap-2">
+                    <select
+                      value={countryCode}
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      className="w-28 h-11 bg-slate-900/50 border border-slate-700 rounded-lg px-2 text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+44">🇬🇧 +44</option>
+                      <option value="+91">🇮🇳 +91</option>
+                      <option value="+61">🇦🇺 +61</option>
+                      <option value="+81">🇯🇵 +81</option>
+                      <option value="+49">🇩🇪 +49</option>
+                      <option value="+33">🇫🇷 +33</option>
+                      <option value="+86">🇨🇳 +86</option>
+                      <option value="+55">🇧🇷 +55</option>
+                    </select>
+                    <Input
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value.replace(/[^\d\s\(\)\-]/g, ''))}
+                      placeholder="555-000-0000"
+                      required
+                      className="flex-1 h-11"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-300">Password</label>

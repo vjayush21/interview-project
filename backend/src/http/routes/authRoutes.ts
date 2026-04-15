@@ -24,7 +24,7 @@ authRoutes.post("/signup", async (req, res) => {
       respondZodError(res, err);
       return;
     }
-    respondError(res, "INTERNAL_ERROR", "Unexpected error", 500);
+    respondError(res, "INTERNAL_ERROR", err instanceof Error ? err.message : "Unexpected error", 500);
   }
 });
 
@@ -46,7 +46,7 @@ authRoutes.post("/login", async (req, res) => {
       respondZodError(res, err);
       return;
     }
-    respondError(res, "INTERNAL_ERROR", "Unexpected error", 500);
+    respondError(res, "INTERNAL_ERROR", err instanceof Error ? err.message : "Unexpected error", 500);
   }
 });
 

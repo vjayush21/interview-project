@@ -4,7 +4,7 @@ import { Page } from "../components/Page";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import { KeyRound, ExternalLink, ShieldCheck, ArrowRight } from "lucide-react";
+import { KeyRound, ShieldCheck, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { apiFetch } from "../api/client";
 import { useAuth } from "../auth/authContext";
@@ -86,30 +86,42 @@ export function OnboardingOpenRouterPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="bg-slate-800/50 rounded-lg p-4 mb-6 border border-white/5">
-                <h4 className="text-sm font-semibold text-slate-200 mb-2 flex items-center">
-                  <ShieldCheck className="h-4 w-4 mr-2 text-emerald-400" />
-                  Secure & Private
+              <div className="bg-slate-800/50 rounded-lg p-6 mb-6 border border-white/5">
+                <h4 className="text-sm font-semibold text-slate-200 mb-4">How to generate your free key:</h4>
+                <ul className="space-y-4">
+                  <li className="flex items-start">
+                    <div className="bg-blue-500/20 rounded-full w-6 h-6 flex items-center justify-center text-blue-400 font-bold text-xs mr-3 mt-0.5 flex-shrink-0">1</div>
+                    <p className="text-sm text-slate-300">
+                      Create a free account on <a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">OpenRouter.ai</a>
+                    </p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="bg-blue-500/20 rounded-full w-6 h-6 flex items-center justify-center text-blue-400 font-bold text-xs mr-3 mt-0.5 flex-shrink-0">2</div>
+                    <p className="text-sm text-slate-300">
+                      Navigate to your <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">API Keys page</a>
+                    </p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="bg-blue-500/20 rounded-full w-6 h-6 flex items-center justify-center text-blue-400 font-bold text-xs mr-3 mt-0.5 flex-shrink-0">3</div>
+                    <p className="text-sm text-slate-300">
+                      Click <strong>"Create Key"</strong>, copy the generated string (it starts with <code className="bg-slate-900 px-1 py-0.5 rounded text-xs">sk-or-v1-</code>), and paste it below.
+                    </p>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-emerald-500/10 rounded-lg p-4 mb-6 border border-emerald-500/20">
+                <h4 className="text-xs font-semibold text-emerald-400 mb-1 flex items-center uppercase tracking-wider">
+                  <ShieldCheck className="h-4 w-4 mr-1.5" />
+                  Secure & Encrypted
                 </h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Your key is encrypted before being stored in our database using AES-256-GCM. 
-                  We only use it to make requests on your behalf during your interview sessions.
+                  Your key is securely encrypted at rest using AES-256-GCM. We never store your raw key, and it is only used to generate your interview questions using AI models.
                 </p>
               </div>
 
               <form onSubmit={onSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-slate-300">OpenRouter API Key</label>
-                    <a 
-                      href="https://openrouter.ai/keys" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-400 hover:text-blue-300 flex items-center"
-                    >
-                      Get your key <ExternalLink className="h-3 w-3 ml-1" />
-                    </a>
-                  </div>
                   <div className="flex gap-2">
                     <Input
                       type="password"
